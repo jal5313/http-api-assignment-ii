@@ -11,8 +11,7 @@ const onRequest = (request, response) => {
   console.log(request.url);
 
   const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl.query);
-    
+
   switch (request.method) {
     case 'GET':
       if (parsedUrl.pathname === '/') {
@@ -27,27 +26,27 @@ const onRequest = (request, response) => {
         jsonHandler.notFound(request, response);
       }
       break;
-    case 'POST': 
+    case 'POST':
       if (parsedUrl.pathname === '/addUser') {
-          const res = response;
-          
-          const body = [];
-          
-          request.on('error', (err) => {
-              console.dir(err);
-              res.statusCode = 400;
-              res.end();
-          });
-          
-          request.on('data', (chunk) => {
-              body.push(chunk);
-          });
-          
-          request.on('end', () => {
-              const bodyString = Buffer.concat(body).toString();
-              const bodyParams = query.parse(bodyString);
-              jsonHandler.addUser(request, response, bodyParams);
-          })
+        const res = response;
+
+        const body = [];
+
+        request.on('error', (err) => {
+          console.dir(err);
+          res.statusCode = 400;
+          res.end();
+        });
+
+        request.on('data', (chunk) => {
+          body.push(chunk);
+        });
+
+        request.on('end', () => {
+          const bodyString = Buffer.concat(body).toString();
+          const bodyParams = query.parse(bodyString);
+          jsonHandler.addUser(request, response, bodyParams);
+        });
       }
       break;
     case 'HEAD':
